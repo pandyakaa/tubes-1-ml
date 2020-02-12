@@ -4,9 +4,6 @@ from statistics import mode
 from Node import Node
 
 
-# def mode(target): return mode(target)
-
-
 class ID3(object):
     @staticmethod
     def gain(entropy, attr_values, target):

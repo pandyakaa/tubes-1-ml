@@ -1,10 +1,8 @@
-# Importing some utils
 import numpy as np
 import csv
 
 
 def read_csv(filename):
-
     with open(filename) as f:
         temp_mat = []
         csv_reader = csv.reader(f, delimiter=',')
