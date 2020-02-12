@@ -16,7 +16,7 @@ class Node(object):
         else:
             ret = self.attr_name+"\n"
             for attr_value, child in self.children.items():
-                ret += "  "*(level + 1) + str(attr_value) + \
+                ret += "|  "*level + "|- " + str(attr_value) + \
                     ": " + child.__str__(level+1)
             return ret
 
