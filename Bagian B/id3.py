@@ -30,9 +30,21 @@ class ID3(object):
         return entropy
 
     @staticmethod
-    def fit(x, y, defaultVal = False):
-        if defaultVal == False:
-            defaultVal = mode(y)
+    def fit(x, y, default_val = False):
+        gain = []
+
+        if default_val == False:
+            default_val = mode(y)
+        
         for target in y:
             if (all(element==target for element in y)) :
                 return Node(target, [], True)
+
+        if a.shape[1] == 0:
+            return Node(default_val, [], True)
+
+        
+        entropy = ID3.count_entropy(y)
+
+        for idx, attr in x.transpose():
+            gain[idx] = gain(entropy,attr,y)
