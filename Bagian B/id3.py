@@ -1,10 +1,10 @@
 import numpy as np
 import math
+from statistics import mode
 from Node import Node
 
 
-def mode(target): return np.apply_along_axis(
-    lambda x: np.bincount(x).argmax(), axis=0, arr=target)
+# def mode(target): return mode(target)
 
 
 class ID3(object):
@@ -56,7 +56,7 @@ class ID3(object):
             default_val = mode(y)
 
         if np.all(y == y[0, ]):
-            return Node(str(y[0][0]), [], True)
+            return Node(str(y[0]), [], True)
 
         if x.shape[1] == 0:
             return Node(str(default_val), [], True)
@@ -81,10 +81,10 @@ class ID3(object):
                 if (example[idx_max] == value):
                     if value_x.shape[0] == 0:
                         value_x = np.array([example])
-                        value_y = np.array([[y[idx]]])
+                        value_y = np.array([y[idx]])
                     else:
                         value_x = np.vstack((value_x, example))
-                        value_y = np.vstack((value_y, [y[idx]]))
+                        value_y = np.append(value_y, y[idx])
 
             value_x = np.delete(value_x, idx_max, axis=1)
             data_per_values[value] = (value_x, value_y)
@@ -96,8 +96,8 @@ class ID3(object):
 
 
 if __name__ == "__main__":
-    ex_x = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
-    ex_target = np.array([1, 2, 2])
+    ex_x = np.array([[1, 0, 0], [0, 1, 0], [0, 1, 1]])
+    ex_target = np.array([1, 2, 3])
     ex_label = ['a', 'b', 'c']
 
     root_node = ID3.fit(ex_x, ex_label, ex_target)

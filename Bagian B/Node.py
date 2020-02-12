@@ -14,7 +14,7 @@ class Node(object):
         if self.is_leaf:
             return self.attr_name+"\n"
         else:
-            ret = "  "*level+self.attr_name+"\n"
+            ret = self.attr_name+"\n"
             for attr_value, child in self.children.items():
                 ret += "  "*(level + 1) + str(attr_value) + \
                     ": " + child.__str__(level+1)

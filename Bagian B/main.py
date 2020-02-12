@@ -1,23 +1,11 @@
-# Importing some utils
-import numpy as np
-import csv
-
-
-def read_csv(filename):
-
-    with open(filename) as f:
-        temp_mat = []
-        csv_reader = csv.reader(f, delimiter=',')
-        for row in csv_reader:
-            temp_mat.append(row)
-
-        np_mat = np.array(temp_mat)
-
-    return np_mat
-
+from id3 import ID3
+from reader import read_csv
 
 if __name__ == "__main__":
-    filename = 'play_tennis.csv'
-    np_matrix = read_csv(filename)
+    data = read_csv('play_tennis.csv')
+    label = data[0, 1:-1].tolist()
+    x = data[1:, 1:-1]
+    target = data[1:, -1:].flatten()
 
-    print(np_matrix)
+    tree = ID3.fit(x, label, target)
+    print(tree)
