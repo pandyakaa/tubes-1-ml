@@ -8,6 +8,8 @@ def mode(target): return np.apply_along_axis(
 
 
 class ID3(object):
+    def __init__(self):
+        pass
     @staticmethod
     def gain(entropy, attr_values, target):
         # entropy - sum_i(frac_i * entropy_i)
