@@ -10,10 +10,18 @@ class Node(object):
             for attr_value in attr_values:
                 self.children[attr_value] = None
 
-    def __str__(self):
-        attr_values_str = '' if self.is_leaf else ' '.join(
-            self.children.keys())
-        return self.attr_name if self.is_leaf else self.attr_name + ': ' + attr_values_str
+    def __str__(self, level=0):
+        if self.is_leaf:
+            return self.attr_name+"\n"
+        else:
+            ret = "  "*level+self.attr_name+"\n"
+            for attr_value, child in self.children.items():
+                ret += "  "*(level + 1) + str(attr_value) + \
+                    ": " + child.__str__(level+1)
+            return ret
+
+    def __repr__(self):
+        return '<Node object>'
 
     def set_child(self, value: str, child: object):
         if value in self.children:
