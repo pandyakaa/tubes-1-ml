@@ -2,13 +2,10 @@ from id3 import ID3
 import numpy as np
 from statistics import mode
 from reader import read_csv
-<<<<<<< HEAD
 from Node import Node
-=======
-from math import ceil
->>>>>>> 6e27c8944e3382b0f3d1834a9394654013d3870b
+from math import ceil, log2
 from c45_numeric_handler import process_numeric
-import math 
+
 
 class C45(ID3):
     def __init__(self):
@@ -37,28 +34,28 @@ class C45(ID3):
         return x
 
     @staticmethod
-    def splitinfo(attr) :
+    def splitinfo(attr):
         total = len(attr)
         infosplit = 0
         array_of_values = []
-        
-        #Get Unique values in attribute
-        for values in attr :
-            for value in values :
+
+        # Get Unique values in attribute
+        for values in attr:
+            for value in values:
                 array_of_values.append(value)
-        
+
         unique_values, counts = np.unique(array_of_values, return_counts=True)
 
-        #Count split info
-        for count in counts :
-            infosplit = -count/total*(math.log2(count/total))
+        # Count split info
+        for count in counts:
+            infosplit = -count/total*(log2(count/total))
 
         return infosplit
-    
+
     @staticmethod
-    def fit(x, labels, y, default_val=False) :
+    def fit(x, labels, y, default_val=False):
         print('Dari C45')
-        process_numeric(x,y)
+        process_numeric(x, y)
 
         gain = list()
 
@@ -111,8 +108,6 @@ class C45(ID3):
 
         return node
 
-
-
     @staticmethod
     def train_test_split(x, y):
         ln_x = ceil(len(x) * 0.8)
@@ -128,12 +123,12 @@ class C45(ID3):
 
         return x_test, y_test, x_train, y_train
 
-    def count_accuracy(self, y, y_test) :
+    def count_accuracy(self, y, y_test):
         count = 0
-        for i in range(len(y)) :
-            if y[i] == y_test[i] :
+        for i in range(len(y)):
+            if y[i] == y_test[i]:
                 count += 1
-        
+
         return (count/len(y)*100)
 
     def prune(self, x_test, y_test, label):
@@ -142,9 +137,10 @@ class C45(ID3):
         acc = self.count_accuracy(predictions, y_test)
 
         print(str(acc) + '%')
-    
-    def predict_after_prune() :
+
+    def predict_after_prune():
         pass
+
 
 if __name__ == "__main__":
     data = read_csv('play_tennis.csv')
@@ -153,7 +149,7 @@ if __name__ == "__main__":
     x = data[1:, 1:-1]
     target = data[1:, -1:].flatten()
 
-    x_test, y_test, x_train, y_train = C45.train_test_split(x,target)
+    x_test, y_test, x_train, y_train = C45.train_test_split(x, target)
     c45 = C45()
     c45.tree = c45.fit(x_train, label, y_train)
     print(c45.tree)
