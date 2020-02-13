@@ -4,6 +4,18 @@ from reader import read_csv
 from Node import Node
 from math import ceil, log2
 from c45_numeric_handler import process_numeric
+from Rule import Rule
+
+
+def powerset(s):
+    x = len(s)
+    subs = []
+    for i in range(1 << x):
+        subs.append([s[j] for j in range(x) if (i & (1 << j))])
+
+    subs.pop(0)
+
+    return subs
 
 
 class C45(ID3):
@@ -55,7 +67,7 @@ class C45(ID3):
     @staticmethod
     def fit(x, labels, y, default_val=False):
         print('Dari C45')
-        x = C45.normalize_missing_attribute(x,y)
+        x = C45.normalize_missing_attribute(x, y)
         process_numeric(x, y)
 
         gain = list()
@@ -124,7 +136,8 @@ class C45(ID3):
 
         return x_test, y_test, x_train, y_train
 
-    def count_accuracy(self, y, y_test):
+    @staticmethod
+    def count_accuracy(y, y_test):
         count = 0
         for i in range(len(y)):
             if y[i] == y_test[i]:
@@ -132,17 +145,33 @@ class C45(ID3):
 
         return (count/len(y)*100)
 
-    def prune(self, x_test, y_test, label):
+    @staticmethod
+    def predict_from_rule_set(x_test, y_test, ruleset, label, default_value):
+        temp = np.array([])
+        for x in x_test:
+            for rule in ruleset:
+                if Rule.is_eq(rule['rules'], x, label):
+                    temp = np.append(temp, rule['target'])
+                    break
+            else:
+                temp = np.append(temp, default_value)
 
-        predictions = self.predict(x_test, label)
-        acc = self.count_accuracy(predictions, y_test)
+        return C45.count_accuracy(temp, y_test)
 
-        print(str(acc) + '%')
-
-    def predict_after_prune():
-        pass
-
-
+    @staticmethod
+    def prune(x_test, y_test, ruleset, label, default_value):
+        for i in range(len(ruleset)):
+            subs = powerset(ruleset[i]['rules'])
+            max_sub_acc = 0
+            max_sub = None
+            for sub in subs :
+                ruleset[i]['rules'] = sub
+                temp_acc = c45.predict_from_rule_set(x_test, y_test, ruleset, label, default_value)
+                if max_sub_acc < temp_acc :
+                    max_sub_acc = temp_acc
+                    max_sub = sub
+            ruleset[i]['rules'] = max_sub
+        
 if __name__ == "__main__":
     data = read_csv('play_tennis.csv')
     label = data[0, 1:-1].tolist()
@@ -153,5 +182,11 @@ if __name__ == "__main__":
     x_test, y_test, x_train, y_train = C45.train_test_split(x, target)
     c45 = C45()
     c45.tree = c45.fit(x_train, label, y_train)
+    default_value = mode(target)
+    print(default_value)
     print(c45.tree)
-    c45.prune(x_test, y_test, training_label)
+    ruleset = c45.tree.to_rule_list()
+    print(x_test)
+    print(ruleset)
+    c45.prune(x_test, y_test, ruleset, label, default_value)
+    print(ruleset)

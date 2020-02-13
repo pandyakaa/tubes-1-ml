@@ -24,6 +24,6 @@ class Rule(object):
     def is_eq(rules: list, values: np.array, label: list):
         satisfies_list = list()
         for rule in rules:
-            satisfies_list.append(rule, values, label)
+            satisfies_list.append(Rule.satisfies(rule, values, label))
 
         return all(satisfies_list)
