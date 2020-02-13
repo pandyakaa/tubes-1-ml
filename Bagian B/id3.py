@@ -6,7 +6,35 @@ from Node import Node
 
 class ID3(object):
     def __init__(self):
-        pass
+        self.tree: Node = None
+
+    def predict(self, x, labels):
+        predict_result = np.array([])
+        root_label = self.tree.attr_name
+        root_is_leaf = self.tree.is_leaf
+
+        if root_is_leaf:
+            return np.array([root_label])
+
+        for row in x:
+            y = ID3._predict(row, labels, self.tree)
+            predict_result = np.append(predict_result, y)
+
+        return predict_result
+
+    @staticmethod
+    def _predict(row, labels, node):
+        node_label = node.attr_name
+        idx = labels.index(node_label)
+        value = row[idx]
+
+        next_node = node.get_child(str(value))
+
+        if next_node.is_leaf:
+            return next_node.attr_name
+        else:
+            return ID3._predict(row, labels, next_node)
+
     @staticmethod
     def gain(entropy, attr_values, target):
         # entropy - sum_i(frac_i * entropy_i)
@@ -23,8 +51,9 @@ class ID3(object):
                 attr_unique_targets[attr] = attr_unique_target
             total += 1
 
-        for attr, attr_unique_target in attr_unique_targets.items():
-            sum_next_entropy += attr_unique_target['count'] / total * \
+        for _, attr_unique_target in attr_unique_targets.items():
+            frac = attr_unique_target['count'] / total
+            sum_next_entropy += frac * \
                 ID3.count_entropy(attr_unique_target['targets'])
 
         return entropy - sum_next_entropy
@@ -99,5 +128,6 @@ if __name__ == "__main__":
     ex_target = np.array([1, 2, 3])
     ex_label = ['a', 'b', 'c']
 
-    root_node = ID3.fit(ex_x, ex_label, ex_target)
-    print(root_node)
+    id3 = ID3()
+    id3.tree = ID3.fit(ex_x, ex_label, ex_target)
+    print(id3.tree)

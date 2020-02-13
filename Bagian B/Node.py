@@ -29,7 +29,7 @@ class Node(object):
         else:
             raise KeyError()
 
-    def get_child(self, value: str):
+    def get_child(self, value):
         if value in self.children:
             return self.children[value]
         else:
@@ -37,5 +37,8 @@ class Node(object):
 
 
 if __name__ == "__main__":
-    node = Node('windy', ['a', 'b'], False)
+    node = Node('Windy', ['Yes', 'No'], False)
+    node.set_child('Yes', Node('Yes', [], True))
+    node.set_child('No', Node('No', [], True))
+
     print(node)
