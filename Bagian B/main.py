@@ -4,7 +4,7 @@ from c45 import C45
 from c45_numeric_handler import process_numeric
 
 if __name__ == "__main__":
-    data = read_csv('iris.csv')
+    data = read_csv('play_tennis.csv')
     label = data[0, 1:-1].tolist()
     x = data[1:, 1:-1]
     target = data[1:, -1:].flatten()
