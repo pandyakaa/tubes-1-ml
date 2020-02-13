@@ -3,6 +3,9 @@ import math
 from statistics import mode
 from Node import Node
 
+def mode(data):
+    return np.apply_along_axis(lambda x: np.bincount(x).argmax(), axis=0, arr=data)
+
 
 class ID3(object):
     def __init__(self):
@@ -104,7 +107,8 @@ class ID3(object):
         node = Node(labels[idx_max], attr_values, False)
 
         # Delete label of best attribute
-        labels.pop(idx_max)
+        next_labels = labels.copy()
+        next_labels.pop(idx_max)
 
         # Split row based on best attribute unique value
         data_per_values = dict()
@@ -125,7 +129,8 @@ class ID3(object):
 
         # Recursively set child for each attribute
         for value, data in data_per_values.items():
-            node.set_child(value, ID3.fit(data[0], labels, data[1]))
+            print(data)
+            node.set_child(value, ID3.fit(data[0], next_labels, data[1]))
 
         return node
 
