@@ -37,7 +37,7 @@ class ID3(object):
 
     @staticmethod
     def gain(entropy, attr_values, target):
-        # entropy - sum_i(frac_i * entropy_i)
+        # $$entropy - \sum_{i=1}^{row}(frac_i * entropy_i)$$
         total = 0
         sum_next_entropy = 0
         attr_unique_targets = dict()
@@ -60,6 +60,7 @@ class ID3(object):
 
     @staticmethod
     def count_entropy(target_attributes):
+        # $$- \sum_{i=1}^{row}(P_i*log_2(P_i))$$
         target_dictionary = dict()
         total = 0
         entropy = 0
@@ -71,7 +72,7 @@ class ID3(object):
                 target_dictionary[val] = 1
             total += 1
 
-        for attr, val in target_dictionary.items():
+        for _, val in target_dictionary.items():
             entropy += -val/total*(math.log2(val/total))
 
         return entropy
@@ -83,24 +84,29 @@ class ID3(object):
         if default_val == False:
             default_val = mode(y)
 
+        # All target are the same value
         if np.all(y == y[0, ]):
             return Node(str(y[0]), [], True)
 
+        # Empty attribute
         if x.shape[1] == 0:
             return Node(str(default_val), [], True)
 
+        # Calculate gain
         entropy = ID3.count_entropy(y)
-
         for idx, attr in enumerate(x.T):
             gain.append(ID3.gain(entropy, attr, y))
 
+        # Create node from best attribute
         idx_max = np.argmax(gain)
         attr_values = np.unique(x.T[idx_max])
 
         node = Node(labels[idx_max], attr_values, False)
 
+        # Delete label of best attribute
         labels.pop(idx_max)
 
+        # Split row based on best attribute unique value
         data_per_values = dict()
         for value in attr_values:
             value_x = np.array([])
@@ -117,6 +123,7 @@ class ID3(object):
             value_x = np.delete(value_x, idx_max, axis=1)
             data_per_values[value] = (value_x, value_y)
 
+        # Recursively set child for each attribute
         for value, data in data_per_values.items():
             node.set_child(value, ID3.fit(data[0], labels, data[1]))
 
