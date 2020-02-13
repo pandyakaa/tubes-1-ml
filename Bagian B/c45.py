@@ -2,6 +2,7 @@ from id3 import ID3
 import numpy as np
 from statistics import mode
 from reader import read_csv
+from math import ceil
 from c45_numeric_handler import process_numeric
 
 class C45(ID3):
