@@ -2,7 +2,11 @@ from id3 import ID3
 import numpy as np
 from statistics import mode
 from reader import read_csv
+<<<<<<< HEAD
 from Node import Node
+=======
+from math import ceil
+>>>>>>> 6e27c8944e3382b0f3d1834a9394654013d3870b
 from c45_numeric_handler import process_numeric
 import math 
 
