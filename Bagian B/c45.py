@@ -1,4 +1,4 @@
-from ID3 import ID3
+from id3 import ID3
 
 class C45(ID3):
     def __init__(self):
