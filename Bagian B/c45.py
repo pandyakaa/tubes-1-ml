@@ -12,7 +12,7 @@ class C45(ID3):
         super().__init__()
 
     @staticmethod
-    def helper_missing_attribut(self, x, y, col):
+    def helper_missing_attribut(x, y, col):
         temp = x[:, col]
         for i in range(len(temp)):
             if temp[i] == '?':
@@ -25,6 +25,7 @@ class C45(ID3):
 
         return x
 
+    @staticmethod
     def normalize_missing_attribute(x, y):
         for row in range(len(x)):
             for col in range(len(x[row])):
@@ -55,6 +56,7 @@ class C45(ID3):
     @staticmethod
     def fit(x, labels, y, default_val=False):
         print('Dari C45')
+        x = C45.normalize_missing_attribute(x,y)
         process_numeric(x, y)
 
         gain = list()
