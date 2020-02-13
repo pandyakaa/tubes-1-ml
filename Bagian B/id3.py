@@ -3,6 +3,9 @@ import math
 from statistics import mode
 from Node import Node
 
+def mode(data):
+    return np.apply_along_axis(lambda x: np.bincount(x).argmax(), axis=0, arr=data)
+
 
 class ID3(object):
     def __init__(self):
