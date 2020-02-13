@@ -17,7 +17,6 @@ if __name__ == "__main__":
     print(id3.predict([x[-1, :]], label))
 
     # C45
-    print(label)
     c45 = C45()
     c45.tree = C45.fit(x, label, target)
     print(c45.tree)

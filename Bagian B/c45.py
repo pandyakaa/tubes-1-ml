@@ -103,7 +103,6 @@ class C45(ID3):
 
         # Recursively set child for each attribute
         for value, data in data_per_values.items():
-            print(data)
             node.set_child(value, ID3.fit(data[0], next_labels, data[1]))
 
         return node
