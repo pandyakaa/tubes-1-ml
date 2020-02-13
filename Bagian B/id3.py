@@ -4,7 +4,15 @@ from statistics import mode
 from Node import Node
 
 def mode(data):
-    return np.apply_along_axis(lambda x: np.bincount(x).argmax(), axis=0, arr=data.flatten())
+    flat = data.flatten()
+    occ = dict()
+    for e in flat:
+        if e in occ:
+            occ[e] += 1
+        else:
+            occ[e] = 1
+    
+    return max(occ, key=occ.get)
 
 class ID3(object):
     def __init__(self):

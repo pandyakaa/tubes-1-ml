@@ -3,12 +3,13 @@ import numpy as np
 import math 
 
 def is_numeric(x) :
-    isnumeric = False
-    i = 0
-    while not(isnumeric) and i != len(x)-1 :
-        isnumeric = x[i].isnumeric()
-        i = i+1
-    return isnumeric
+    for i in range (0,len(x)) :
+        try:
+            float(x[i])
+        except ValueError:
+            return False
+    
+    return True
 
 def is_continuous(x) :
 # Input : Np array 
