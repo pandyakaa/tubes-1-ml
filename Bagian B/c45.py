@@ -2,6 +2,7 @@ from id3 import ID3
 import numpy as np
 from statistics import mode
 from reader import read_csv
+from c45_numeric_handler import process_numeric
 
 class C45(ID3):
     def __init__(self):
@@ -29,6 +30,16 @@ class C45(ID3):
                     x = C45.helper_missing_attribut(x, y, col)
         
         return x
+    
+    @staticmethod
+    def fit(x, labels, y, default_val=False) :
+        print('Dari C45')
+        process_numeric(x,y)
+        print("=====After numeric processing======")
+        print(x)
+        print("==============================")
+        return ID3.fit(x, labels, y, True)
+
 
 if __name__ == "__main__":
     data = read_csv('play_tennis.csv')

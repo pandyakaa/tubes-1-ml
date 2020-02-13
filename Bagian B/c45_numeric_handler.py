@@ -29,14 +29,8 @@ def process_numeric(M, target) :
         if is_continuous(current_column) :
             current_column = current_column.astype('float64')
             threshold = find_threshold(current_column, target)
-            print("Column: %s" % (column_index))
-            print("Threshold: %s" % (threshold))
             discrete_column = discretize_vect(M[:,column_index],threshold)
             M[:,column_index] = discrete_column
-            # if column_index == 0 :
-            #     discrete_cols = new_col
-            # else :
-            #     discrete_cols = np.vstack([discrete_cols,new_col])
 
     # return discrete_cols
 #[1,2,1,2,2] [0,0,0,1,1]
@@ -57,7 +51,7 @@ def find_threshold(array, target) :
 
         #Count Entropy
         entropy = 0
-        entropy = count_entropy(list_1) + count_entropy(list_2)
+        entropy = _count_entropy(list_1) + _count_entropy(list_2)
         list_of_entropy.append(entropy)
     
     #Get index of minimum entropy
@@ -71,7 +65,7 @@ def discretize(item, threshold) :
         return "> %s" % (threshold)
 
 
-def count_entropy(target_attributes):
+def _count_entropy(target_attributes):
     target_dictionary = dict()
     total = 0
     entropy = 0
@@ -90,6 +84,6 @@ def count_entropy(target_attributes):
 
 
 
-m = np.array([[1,"b",1,"a"],[2,"b",2,"b"],[3,"b",3,"c"],[3,"b",3,"d"], [3,"b",3,"e"], [4,"b",4,"f"]])
-target = np.array([0,0,1,1,1,1])
+# m = np.array([[1,"b",1,"a"],[2,"b",2,"b"],[3,"b",3,"c"],[3,"b",3,"d"], [3,"b",3,"e"], [4,"b",4,"f"]])
+# target = np.array([0,0,1,1,1,1])
 
