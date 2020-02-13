@@ -1,3 +1,6 @@
+from Rule import Rule
+
+
 class Node(object):
     def __init__(self, attr_name: str, attr_values: list, is_leaf: bool):
         self.attr_name = attr_name
@@ -29,11 +32,35 @@ class Node(object):
         else:
             raise KeyError()
 
-    def get_child(self, value):
+    def get_child(self, value: str):
         if value in self.children:
             return self.children[value]
         else:
             raise KeyError()
+
+    def to_rule_list(self):
+        # Returns tree as disjunction of conjunction of rule
+        # Format: [{'target': leaf values, rules: [Rule]}, {}, {}]
+        if self.is_leaf:
+            return self.attr_name
+
+        disjunction_of_conjunction = list()
+        for value, child in self.children.items():
+            next_node_conjunctions = child.to_rule_list()
+            current_node_rule = Rule(self.attr_name, value)
+
+            if type(next_node_conjunctions) == list:
+                for conjunction in next_node_conjunctions:
+                    conjunction['rules'].append(current_node_rule)
+                disjunction_of_conjunction.extend(next_node_conjunctions)
+            else:
+                new_conjunction = {
+                    'target': next_node_conjunctions,
+                    'rules': [current_node_rule]
+                }
+                disjunction_of_conjunction.append(new_conjunction)
+
+        return disjunction_of_conjunction
 
 
 if __name__ == "__main__":

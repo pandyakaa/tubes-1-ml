@@ -12,5 +12,5 @@ if __name__ == "__main__":
     id3 = ID3()
     id3.tree = ID3.fit(x, training_label, target)
     print(id3.tree)
-
+    print(id3.tree.to_rule_list())
     print(id3.predict([x[-1, :]], label))
