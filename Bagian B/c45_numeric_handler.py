@@ -84,6 +84,6 @@ def _count_entropy(target_attributes):
 
 
 
-# m = np.array([[1,"b",1,"a"],[2,"b",2,"b"],[3,"b",3,"c"],[3,"b",3,"d"], [3,"b",3,"e"], [4,"b",4,"f"]])
-# target = np.array([0,0,1,1,1,1])
+m = np.array([[1,"b",1,"a"],[2,"b",2,"b"],[3,"b",3,"c"],[3,"b",3,"d"], [3,"b",3,"e"], [4,"b",4,"f"]])
+target = np.array([0,0,1,1,1,1])
 
