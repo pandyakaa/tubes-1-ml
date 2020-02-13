@@ -27,3 +27,12 @@ class Rule(object):
             satisfies_list.append(Rule.satisfies(rule, values, label))
 
         return all(satisfies_list)
+    
+    @staticmethod
+    def printset(ruleset: list):
+        for rule in ruleset:
+            preconds = list()
+            for precond in rule['rules']: preconds.append(str(precond))
+            precond_string = ' ^ '.join(preconds)
+
+            print(f"IF {precond_string} THEN {rule['target']}")
