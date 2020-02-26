@@ -1,6 +1,7 @@
 import numpy as np 
 import math 
 import csv
+import numpy as np
 
 #CSV reader function
 def read_csv(filename):
@@ -16,9 +17,10 @@ def read_csv(filename):
 
 #Sigmoid function 
 def sigmoid(x) :
-    return 0
+    return 1.0 / (1.0 + np.exp(-x))
+
 
 #Derivative of sigmoid function
 def d_sigmoid(x) :
-    return 0 
+    return sigmoid(x) * (1.0 - sigmoid(x))
 
