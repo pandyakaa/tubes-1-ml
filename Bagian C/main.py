@@ -1,7 +1,18 @@
-# Intinya Program Utama
-# 1. Read file berisi dataset
-# 2. Seperte into X and Y
-# 3. Initialize MLP Object
-# 4. Panggil fungsi train
-# 5. Coba predict
+from mlp import MyMlp
+import numpy as np
+from utils import read_csv
 
+if __name__ == "__main__":
+    dataset = read_csv('datasets/iris.csv')
+    label = dataset[0]
+    data = dataset[1:]
+    
+    data_feature = data[0: , :-1]
+    data_target = data[0: , -1:]
+    
+    input_layer = len(data_feature[0])
+    output_layer = len(np.unique(data_target))
+    hidden_layer = [4, 3]
+
+    mlp = MyMlp(input_layer, hidden_layer, output_layer)
+    mlp.fit(data_feature, data_target, 0.1)

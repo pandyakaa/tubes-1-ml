@@ -84,7 +84,7 @@ class MyMlp(object):
 
         return all_avg_dw
 
-    def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=1):
+    def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=1000, learning_rate=0.001):
         n = len(x_train)
         for epoch in range(epochs):
             x_mini_batches = [x_train[i:i+mini_batch_size]
@@ -93,19 +93,21 @@ class MyMlp(object):
                             for i in range(0, n, mini_batch_size)]
             for i in range(len(x_mini_batches)) :
                 mini_batch = np.concatenate([x_mini_batches[i], y_mini_batches[i]], axis=1)
-                self.update_batch(mini_batch)
+                self.update_batch(mini_batch, learning_rate)
 
-    def update_batch(self, mini_batch):
+    def update_batch(self, mini_batch, learning_rate):
         mini_batch_data = mini_batch[0:, :-1]
         mini_batch_target = mini_batch[0:, -1:]
         feed_forward_result = self.feed_forward(mini_batch_data.T)
-        # target_matrix = mini_batch_target.T
-        # Return from feed forward passed to back_propagation
-        # Target diubah dari satu kolom, jadi n kolom dengan nilai masing-masing (contoh : [[1,0,0], [0,1,0]])
-        # Update self.weights with result from back_propagation
+        # TODO : target_matrix = mini_batch_target.T
+        # TODO : back_prop_result = self.back_propagation(feed_forward_result, target_matrix)
+        # TODO : for i in range(len(self.weights)) :
+                    # self.weights[i] += (learning_rate * back_prop_result[i])
 
     def predict(self, x_test: np.array) -> np.array:
-        pass
+       result = self.feed_forward(x_test.T)
+
+       return result[-1]
 
     def score(self, x_test: np.array, y_test: np.array) -> float:
         # Output : akurasi dari model
