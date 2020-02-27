@@ -46,7 +46,6 @@ class MyMlp(object):
         self.weights.append(weight_matrix)
 
     def initialize_biases(self):
-<<<<<<< Updated upstream
         # Count number of passes to make
         n_passes = len(self.weights)
         
@@ -58,29 +57,16 @@ class MyMlp(object):
     def feed_forward(self, input_values: np.array) :
         # Output : list of np.array of np.array 
         result_list = [] 
-=======
-        pass
-
-    def feed_forward(self, input_values: np.array):
-        # Output : list of np.array of np.array
-        result_list = []
->>>>>>> Stashed changes
         # Count number of passes to make
         n_passes = len(self.weights)
         # Append result_list
         result_list.append(input_values)
 
-<<<<<<< Updated upstream
         for i in range(0,n_passes) :
             input_values = np.dot(input_values,self.weights[i])
             # factor in biases
             input_values = input_values + self.bias[i]
             result_list = result_list.append(input_values)
-=======
-        for i in range(0, n_passes):
-            input_values = np.dot(input_values, self.weights[i])
-            result_list = result_list.append()
->>>>>>> Stashed changes
         return result_list
 
     def back_propagation(self, output: list, target: np.array) -> list:
