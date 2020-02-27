@@ -1,3 +1,5 @@
+from utils import d_node, d_sigmoid
+from functools import reduce
 import numpy as np
 import random
 import math
@@ -59,9 +61,28 @@ class MyMlp(object):
             result_list = result_list.append()
         return result_list
 
-    def back_propagation(self, output: np.array, target: np.array) -> np.array:
+    def back_propagation(self, output: list, target: np.array) -> list:
         # Output : array of np.array 2 dimensi sebagai representasi delta W
-        pass
+        all_avg_dw = list()
+
+        for i in range(len(output), 0, -1):
+            d_node = np.vectorize(d_node)(target, output[i])
+            h = output[i - 1]
+            data_count_per_batch = d_node.shape[1]
+
+            all_dw_layer = list()
+
+            for j in range(data_count_per_batch):
+                dw = np.matmul(h[:, j:j+1], d_node[:, j:j+1].T)
+                all_dw_layer.append(dw)
+
+            avg_dw_layer = reduce(lambda x, y: x + y, all_dw_layer)
+            avg_dw_layer = np.vectorize(
+                lambda x: x/data_count_per_batch)(avg_dw_layer)
+
+            all_avg_dw.insert(0, avg_dw_layer)
+
+        return all_avg_dw
 
     def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=500):
         n = len(x_train)
