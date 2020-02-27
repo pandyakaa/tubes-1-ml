@@ -1,9 +1,9 @@
-import numpy as np 
-import math 
+import numpy as np
+import math
 import csv
 import numpy as np
 
-#CSV reader function
+# CSV reader function
 def read_csv(filename):
     with open(filename) as f:
         temp_mat = []
@@ -15,12 +15,17 @@ def read_csv(filename):
 
     return np_mat
 
-#Sigmoid function 
-def sigmoid(x) :
+# Sigmoid function
+
+
+def sigmoid(x):
     return 1.0 / (1.0 + np.exp(-x))
 
 
-#Derivative of sigmoid function
-def d_sigmoid(x) :
+# Derivative of sigmoid function
+def d_sigmoid(x):
     return sigmoid(x) * (1.0 - sigmoid(x))
 
+
+def multiply_matrix_to_column_vector(mat, vec) -> np.array:
+    pass
