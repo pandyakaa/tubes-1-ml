@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 
 class MyMlp(object):
@@ -21,8 +22,21 @@ class MyMlp(object):
         # Output : array of np.array 2 dimensi sebagai representasi delta W
         pass
 
-    def fit(self, x_train: np.array, y_train: np.array):
-        # Output : none
+    def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=500):
+        n = len(x_train)
+        for epoch in range(epochs):
+            random.shuffle(x_train)
+            mini_batches = [x_train[i:i+mini_batch_size]
+                            for i in range(0, n, mini_batch_size)]
+            for mini_batch in mini_batches:
+                delta_w = self.update_batch(mini_batch)
+
+            self.update_weight(delta_w)
+
+    def update_batch(self, mini_batch) -> np.array:
+        pass
+
+    def update_weight(self, delta_w):
         pass
 
     def predict(self, x_test: np.array) -> np.array:
@@ -38,4 +52,12 @@ class MyMlp(object):
                 correct+=1
         return correct/x_test.shape[0]
 
-    pass
+
+if __name__ == "__main__":
+    input_layer = [0, 1]
+    hidden_layer = [2]
+    output_layer = [0, 1]
+    x_train = np.array([1, 2, 3, 4])
+    y_train = np.array([1, 2, 3, 4])
+    mlp = MyMlp(input_layer, hidden_layer, output_layer)
+    mlp.fit(x_train, y_train, 0.2)
