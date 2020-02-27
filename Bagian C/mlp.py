@@ -51,7 +51,7 @@ class MyMlp(object):
         
         #initialize bias with 0.01
         for i in range(0,n_passes):
-            self.bias = self.bias.append(0.01)
+            self.bias.append(0.01)
         
     
     def feed_forward(self, input_values: np.array) :

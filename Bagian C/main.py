@@ -7,7 +7,7 @@ if __name__ == "__main__":
     label = dataset[0]
     data = dataset[1:]
     
-    data_feature = data[0: , :-1]
+    data_feature = data[0: , :-1].astype(float)
     data_target = oneHotEncoder(data[0: , -1:].flatten())
     
     input_layer = len(data_feature[0])
