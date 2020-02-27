@@ -44,3 +44,10 @@ def half_squared_err(delta):
 
 def d_node(target, out):
     return -1*(target - out) * out * (1 - out)
+
+def scale_data(data, lower_bound, upper_bound):
+    nominator = (data-data.min(axis=0))*(upper_bound-lower_bound)
+    denominator = data.max(axis=0) - data.min(axis=0)
+    denominator[denominator==0] = 1
+    normalized_data = nominator/denominator + lower_bound
+    return normalized_data
