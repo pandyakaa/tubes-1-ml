@@ -1,6 +1,6 @@
 import numpy as np
 import random
-
+import math
 
 class MyMlp(object):
 
@@ -12,15 +12,43 @@ class MyMlp(object):
             np.append(input_layer, hidden_layer), output_layer)
         self.weights = []
         self.n_layer = 2 + len(hidden_layer)
+        self.bias = []
 
     def initialize_weights(self):
+        # Uses Xavier Initialization technique to initialize random weights
+        # Initialize first set of weights input - hidden 1
+        layer_1 = self.input_layer
+        layer_2 = self.hidden_layer[0] 
+        weight_matrix = np.random.randn(layer_2,layer_1)*np.sqrt(2/layer_1 + layer_2)
+        self.weights = self.weights.append(weight_matrix)
+
+        #Initialize weights for each set of hidden layers
+        n_hidden = len(self.hidden_layer)
+        for i in range (0, n_hidden-1):
+            layer_1 = self.hidden_layer[i]
+            layer_2 = self.hidden_layer[i+1] 
+            weight_matrix = np.random.randn(layer_2,layer_1)*np.sqrt(2/layer_1 + layer_2)
+            self.weights.append(weight_matrix) 
+            self.weights = self.weights.append(weight_matrix)
+        
+        #initialize final set of weights for hidden - output
+        layer_1 = self.hidden_layer[-1]
+        layer_2 = self.output_layer 
+        weight_matrix = np.random.randn(layer_2,layer_1)*np.sqrt(2/layer_1 + layer_2)
+        self.weights = self.weights.append(weight_matrix)
+        
         pass
 
+    def initialize_bias(self):
+        pass
+    
     def feed_forward(self, input_values: np.array) :
         # Output : list of np.array of np.array 
         result_list = [] 
-        #Count number of passes to make
+        # Count number of passes to make
         n_passes = len(self.weights)
+        # Append result_list
+        result_list.append(input_layer)
 
         for i in range(0,n_passes) :
             input_values = np.dot(input_values,self.weights[i])
