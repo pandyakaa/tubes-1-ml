@@ -61,27 +61,33 @@ class MyMlp(object):
         n_passes = len(self.weights)
         # Append result_list
         result_list.append(input_values)
+        # print(input_values)
+        # print(self.weights)
 
         for i in range(0,n_passes) :
-            input_values = np.dot(input_values,self.weights[i])
+            input_values = np.dot(self.weights[i], input_values)
             # factor in biases
             input_values = input_values + self.bias[i]
-            result_list = result_list.append(input_values)
+            result_list.append(input_values)
+
         return result_list
 
     def back_propagation(self, output: list, target: np.array) -> list:
         # Output : array of np.array 2 dimensi sebagai representasi delta W
         all_avg_dw = list()
 
-        for i in range(len(output), 0, -1):
-            d_node = np.vectorize(d_node)(target, output[i])
+        for i in range(len(output) - 1, 0, -1):
+            # print(i)
+            # print(target)
+            # print(output[i])
+            d_node_layer = np.vectorize(d_node)(target, output[i])
             h = output[i - 1]
-            data_count_per_batch = d_node.shape[1]
+            data_count_per_batch = d_node_layer.shape[1]
 
             all_dw_layer = list()
 
             for j in range(data_count_per_batch):
-                dw = np.matmul(h[:, j:j+1], d_node[:, j:j+1].T)
+                dw = np.matmul(h[:, j:j+1], d_node_layer[:, j:j+1].T)
                 all_dw_layer.append(dw)
 
             avg_dw_layer = reduce(lambda x, y: x + y, all_dw_layer)
@@ -100,13 +106,9 @@ class MyMlp(object):
             y_mini_batches = [y_train[i:i+mini_batch_size]
                               for i in range(0, n, mini_batch_size)]
             for i in range(len(x_mini_batches)):
-                mini_batch = np.concatenate(
-                    [x_mini_batches[i], y_mini_batches[i]], axis=1)
-                self.update_batch(mini_batch, learning_rate)
+                self.update_batch(x_mini_batches[i], y_mini_batches[i], learning_rate)
 
-    def update_batch(self, mini_batch, learning_rate):
-        mini_batch_data = mini_batch[0:, :-1]
-        mini_batch_target = mini_batch[0:, -1:]
+    def update_batch(self, mini_batch_data, mini_batch_target, learning_rate):
 
         feed_forward_result = self.feed_forward(mini_batch_data.T)
         target_matrix = mini_batch_target.T
