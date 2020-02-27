@@ -3,12 +3,15 @@ import numpy as np
 
 class MyMlp(object):
 
+    [np.array([[1,2],[3,4]])]
+
     def __init__(self, input_layer, hidden_layer, output_layer):
-        self.input = input_layer
-        self.hidden = hidden_layer
-        self.output = output_layer
+        self.input_layer = input_layer
+        self.hidden_layer = hidden_layer
+        self.output_layer = output_layer
+        self.layers = np.append(np.append(input_layer,hidden_layer), output_layer)
         self.weights = []
-        self.n_layer = len(input_layer) + len(hidden_layer) + len(output_layer)
+        self.n_layer = 2 + len(hidden_layer)
 
     def initialize_weights(self):
         pass
@@ -26,9 +29,7 @@ class MyMlp(object):
         pass
 
     def predict(self, x_test: np.array) -> np.array:
-        # Output : array of hasil prediksi (target prediksi)
         pass
-
     def score(self, x_test: np.array, y_test: np.array) -> float:
         # Output : akurasi dari model
         correct = 0
@@ -38,4 +39,15 @@ class MyMlp(object):
                 correct+=1
         return correct/x_test.shape[0]
 
-    pass
+    def __str__(self):
+        for l in range(0,len(self.weights)):
+            weight = self.weights[l]
+            layer = 'Layer-'+str(l)+'('
+            for i in range(0,weight.shape[0]):
+                weightRow = weight[i]
+                for j in range(0,len(weightRow)):
+                    w = layer+str(j)+'-'+str(i)+') : '+str(weightRow[j])
+                    print(w, end='  ')    
+            print('\n')
+
+
