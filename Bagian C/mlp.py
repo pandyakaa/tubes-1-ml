@@ -1,4 +1,4 @@
-from utils import d_node, d_sigmoid
+from utils import d_node, d_sigmoid, sigmoid
 from functools import reduce
 
 import numpy as np
@@ -63,11 +63,13 @@ class MyMlp(object):
         result_list.append(input_values)
         # print(input_values)
         # print(self.weights)
+        sigmoid_vect = np.vectorize(sigmoid)
 
         for i in range(0, n_passes):
             input_values = np.dot(self.weights[i], input_values)
             # factor in biases
             input_values = input_values + self.bias[i]
+            input_values = sigmoid_vect(input_values)
             result_list.append(input_values)
 
         return result_list
