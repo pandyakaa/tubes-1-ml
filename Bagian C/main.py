@@ -1,6 +1,6 @@
 from mlp import MyMlp
 import numpy as np
-from utils import read_csv
+from utils import read_csv, oneHotEncoder
 
 if __name__ == "__main__":
     dataset = read_csv('datasets/iris.csv')
@@ -8,7 +8,7 @@ if __name__ == "__main__":
     data = dataset[1:]
     
     data_feature = data[0: , :-1]
-    data_target = data[0: , -1:]
+    data_target = oneHotEncoder(data[0: , -1:].flatten())
     
     input_layer = len(data_feature[0])
     output_layer = len(np.unique(data_target))

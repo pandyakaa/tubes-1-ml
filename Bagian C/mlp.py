@@ -4,6 +4,7 @@ import numpy as np
 import random
 import math
 
+
 class MyMlp(object):
 
     def __init__(self, input_layer, hidden_layer, output_layer):
@@ -19,33 +20,33 @@ class MyMlp(object):
         self.initialize_weights()
         self.initialize_biases()
 
-
     def initialize_weights(self):
         # Uses Xavier Initialization technique to initialize random weights
         # Initialize first set of weights input - hidden 1
         layer_1 = self.input_layer
-        layer_2 = self.hidden_layer[0] 
-        weight_matrix = np.random.randn(layer_2,layer_1)*np.sqrt(2/layer_1 + layer_2)
-        self.weights = self.weights.append(weight_matrix)
+        layer_2 = self.hidden_layer[0]
+        weight_matrix = np.random.randn(
+            layer_2, layer_1)*np.sqrt(2/layer_1 + layer_2)
+        self.weights.append(weight_matrix)
 
-        #Initialize weights for each set of hidden layers
+        # Initialize weights for each set of hidden layers
         n_hidden = len(self.hidden_layer)
-        for i in range (0, n_hidden-1):
+        for i in range(0, n_hidden-1):
             layer_1 = self.hidden_layer[i]
-            layer_2 = self.hidden_layer[i+1] 
-            weight_matrix = np.random.randn(layer_2,layer_1)*np.sqrt(2/layer_1 + layer_2)
-            self.weights.append(weight_matrix) 
-            self.weights = self.weights.append(weight_matrix)
-        
-        #initialize final set of weights for hidden - output
-        layer_1 = self.hidden_layer[-1]
-        layer_2 = self.output_layer 
-        weight_matrix = np.random.randn(layer_2,layer_1)*np.sqrt(2/layer_1 + layer_2)
-        self.weights = self.weights.append(weight_matrix)
+            layer_2 = self.hidden_layer[i+1]
+            weight_matrix = np.random.randn(
+                layer_2, layer_1)*np.sqrt(2/layer_1 + layer_2)
+            self.weights.append(weight_matrix)
 
-        pass
+        # initialize final set of weights for hidden - output
+        layer_1 = self.hidden_layer[-1]
+        layer_2 = self.output_layer
+        weight_matrix = np.random.randn(
+            layer_2, layer_1)*np.sqrt(2/layer_1 + layer_2)
+        self.weights.append(weight_matrix)
 
     def initialize_biases(self):
+<<<<<<< Updated upstream
         # Count number of passes to make
         n_passes = len(self.weights)
         
@@ -57,16 +58,29 @@ class MyMlp(object):
     def feed_forward(self, input_values: np.array) :
         # Output : list of np.array of np.array 
         result_list = [] 
+=======
+        pass
+
+    def feed_forward(self, input_values: np.array):
+        # Output : list of np.array of np.array
+        result_list = []
+>>>>>>> Stashed changes
         # Count number of passes to make
         n_passes = len(self.weights)
         # Append result_list
         result_list.append(input_values)
 
+<<<<<<< Updated upstream
         for i in range(0,n_passes) :
             input_values = np.dot(input_values,self.weights[i])
             # factor in biases
             input_values = input_values + self.bias[i]
             result_list = result_list.append(input_values)
+=======
+        for i in range(0, n_passes):
+            input_values = np.dot(input_values, self.weights[i])
+            result_list = result_list.append()
+>>>>>>> Stashed changes
         return result_list
 
     def back_propagation(self, output: list, target: np.array) -> list:
@@ -96,26 +110,31 @@ class MyMlp(object):
         n = len(x_train)
         for epoch in range(epochs):
             x_mini_batches = [x_train[i:i+mini_batch_size]
-                            for i in range(0, n, mini_batch_size)]
+                              for i in range(0, n, mini_batch_size)]
             y_mini_batches = [y_train[i:i+mini_batch_size]
-                            for i in range(0, n, mini_batch_size)]
-            for i in range(len(x_mini_batches)) :
-                mini_batch = np.concatenate([x_mini_batches[i], y_mini_batches[i]], axis=1)
+                              for i in range(0, n, mini_batch_size)]
+            for i in range(len(x_mini_batches)):
+                mini_batch = np.concatenate(
+                    [x_mini_batches[i], y_mini_batches[i]], axis=1)
                 self.update_batch(mini_batch, learning_rate)
 
     def update_batch(self, mini_batch, learning_rate):
         mini_batch_data = mini_batch[0:, :-1]
         mini_batch_target = mini_batch[0:, -1:]
+
         feed_forward_result = self.feed_forward(mini_batch_data.T)
-        # TODO : target_matrix = mini_batch_target.T
-        # TODO : back_prop_result = self.back_propagation(feed_forward_result, target_matrix)
-        # TODO : for i in range(len(self.weights)) :
-                    # self.weights[i] += (learning_rate * back_prop_result[i])
+        target_matrix = mini_batch_target.T
+
+        back_prop_result = self.back_propagation(
+            feed_forward_result, target_matrix)
+
+        for i in range(len(self.weights)):
+            self.weights[i] += (learning_rate * back_prop_result[i])
 
     def predict(self, x_test: np.array) -> np.array:
-       result = self.feed_forward(x_test.T)
+        result = self.feed_forward(x_test.T)
 
-       return result[-1]
+        return result[-1]
 
     def score(self, x_test: np.array, y_test: np.array) -> float:
         # Output : akurasi dari model
@@ -136,13 +155,3 @@ class MyMlp(object):
                     w = layer+str(j)+'-'+str(i)+') : '+str(weightRow[j])
                     print(w, end='  ')
             print('\n')
-
-
-if __name__ == "__main__":
-    input_layer = [0, 1]
-    hidden_layer = [2]
-    output_layer = [0, 1]
-    x_train = np.array([[1, 2, 3], [3, 4, 5], [3, 4, 7]])
-    y_train = np.array([[1], [2], [1]])
-    mlp = MyMlp(input_layer, hidden_layer, output_layer)
-    mlp.fit(x_train, y_train, 0.2)
