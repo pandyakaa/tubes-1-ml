@@ -31,20 +31,26 @@ class MyMlp(object):
         # Output : array of np.array 2 dimensi sebagai representasi delta W
         pass
 
-    def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=500):
+    def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=1):
         n = len(x_train)
         for epoch in range(epochs):
-            mini_batches = [x_train[i:i+mini_batch_size]
+            x_mini_batches = [x_train[i:i+mini_batch_size]
                             for i in range(0, n, mini_batch_size)]
-            for mini_batch in mini_batches:
-                self.update_batch(mini_batch.T)
+            y_mini_batches = [y_train[i:i+mini_batch_size]
+                            for i in range(0, n, mini_batch_size)]
+            for i in range(len(x_mini_batches)) :
+                mini_batch = np.concatenate([x_mini_batches[i], y_mini_batches[i]], axis=1)
+                self.update_batch(mini_batch)
 
     def update_batch(self, mini_batch):
-        # Do feed forward
+        mini_batch_data = mini_batch[0:, :-1]
+        mini_batch_target = mini_batch[0:, -1:]
+        feed_forward_result = self.feed_forward(mini_batch_data.T)
+        target_matrix = mini_batch_target.T
+        print(target_matrix)
         # Return from feed forward passed to back_propagation
         # Target diubah dari satu kolom, jadi n kolom dengan nilai masing-masing (contoh : [[1,0,0], [0,1,0]])
         # Update self.weights with result from back_propagation
-        print(type(mini_batch))
 
     def predict(self, x_test: np.array) -> np.array:
         pass
@@ -74,7 +80,7 @@ if __name__ == "__main__":
     input_layer = [0, 1]
     hidden_layer = [2]
     output_layer = [0, 1]
-    x_train = np.array([[1, 2, 3], [3, 4, 5]])
-    y_train = np.array([[1], [2]])
+    x_train = np.array([[1, 2, 3], [3, 4, 5], [3, 4, 7]])
+    y_train = np.array([[1], [2], [1]])
     mlp = MyMlp(input_layer, hidden_layer, output_layer)
     mlp.fit(x_train, y_train, 0.2)
