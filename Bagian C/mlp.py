@@ -27,7 +27,7 @@ class MyMlp(object):
         layer_1 = self.input_layer
         layer_2 = self.hidden_layer[0]
         weight_matrix = np.random.randn(
-            layer_2, layer_1)*np.sqrt(2/layer_1 + layer_2)
+            layer_2, layer_1)
         self.weights.append(weight_matrix)
 
         # Initialize weights for each set of hidden layers
@@ -36,14 +36,14 @@ class MyMlp(object):
             layer_1 = self.hidden_layer[i]
             layer_2 = self.hidden_layer[i+1]
             weight_matrix = np.random.randn(
-                layer_2, layer_1)*np.sqrt(2/layer_1 + layer_2)
+                layer_2, layer_1)
             self.weights.append(weight_matrix)
 
         # initialize final set of weights for hidden - output
         layer_1 = self.hidden_layer[-1]
         layer_2 = self.output_layer
         weight_matrix = np.random.randn(
-            layer_2, layer_1)*np.sqrt(2/layer_1 + layer_2)
+            layer_2, layer_1)
         self.weights.append(weight_matrix)
 
     def initialize_biases(self):
@@ -126,12 +126,22 @@ class MyMlp(object):
         for i in range(len(self.weights)):
             self.weights[i] += (learning_rate * back_prop_result[i])
 
-        print(self.weights)
+    def predict_proba(self, x_test: np.array) -> np.array:
+        result = self.feed_forward(x_test.T)[-1].T
+
+        return result
 
     def predict(self, x_test: np.array) -> np.array:
-        result = self.feed_forward(x_test.T)
+        result = self.feed_forward(x_test.T)[-1].T
+        classes = []
 
-        return result[-1]
+        for t in result:
+            temp = np.array(np.zeros(t.shape[0], dtype=int))
+            temp[np.argmax(t)] = 1
+            classes.append(temp)
+
+        classes = np.array(classes)
+        return classes
 
     def score(self, x_test: np.array, y_test: np.array) -> float:
         # Output : akurasi dari model

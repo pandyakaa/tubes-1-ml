@@ -19,7 +19,8 @@ if __name__ == "__main__":
     hidden_layer = [4, 3]
 
     mlp = MyMlp(input_layer, hidden_layer, output_layer)
-    mlp.fit(data_feature, data_target, 0.1, epochs=1000, learning_rate=0.01)
+    mlp.fit(data_feature, data_target, 0.1,
+            mini_batch_size=100, epochs=1, learning_rate=0.01)
 
     mlp.print()
 
@@ -27,6 +28,6 @@ if __name__ == "__main__":
     data_target_test = oneHotEncoder(target_values_test)
     data_feature_test = data[100:, :-1].astype(float)
 
-    print(data_target_test)
-    print(mlp.predict(data_feature_test).T)
+    # print(data_target_test)
+    print(mlp.predict_proba(data_feature_test))
     print(mlp.score(data_feature_test, data_target_test))
