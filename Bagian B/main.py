@@ -5,11 +5,7 @@ from c45_numeric_handler import process_numeric
 from Rule import Rule
 
 if __name__ == "__main__":
-    data = read_csv('datasets/play_tennis.csv')
-    label = data[0, 1:-1].tolist()
-    x = data[1:, 1:-1]
     target = data[1:, -1:].flatten()
-
     # ID3
     print("=====ID 3=====")
     id3 = ID3()
