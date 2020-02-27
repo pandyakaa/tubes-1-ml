@@ -18,3 +18,6 @@ if __name__ == "__main__":
 
     print('The machine verdict:')
     print(clf.predict(X[100:]))
+    print()
+
+    print(clf.coefs_)

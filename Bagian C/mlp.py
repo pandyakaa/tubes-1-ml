@@ -80,8 +80,6 @@ class MyMlp(object):
         d_node_layer_temp = np.array([])
 
         for i in range(len(output) - 1, 0, -1):
-            # print(i)
-            # print(target)
             if (i == len(output) - 1):
                 d_node_layer = np.vectorize(d_node)(target, output[i])
             else:
@@ -107,7 +105,7 @@ class MyMlp(object):
 
         return all_avg_dw
 
-    def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=1000, learning_rate=0.001):
+    def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=1000, learning_rate=0.01):
         n = len(x_train)
         for epoch in range(epochs):
             x_mini_batches = [x_train[i:i+mini_batch_size]
@@ -143,7 +141,7 @@ class MyMlp(object):
                 correct += 1
         return correct/x_test.shape[0]
 
-    def __str__(self):
+    def print(self):
         for l in range(0, len(self.weights)):
             weight = self.weights[l]
             layer = 'Layer-'+str(l)+'('
