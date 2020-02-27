@@ -67,8 +67,7 @@ class MyMlp(object):
         mini_batch_data = mini_batch[0:, :-1]
         mini_batch_target = mini_batch[0:, -1:]
         feed_forward_result = self.feed_forward(mini_batch_data.T)
-        target_matrix = mini_batch_target.T
-        print(target_matrix)
+        # target_matrix = mini_batch_target.T
         # Return from feed forward passed to back_propagation
         # Target diubah dari satu kolom, jadi n kolom dengan nilai masing-masing (contoh : [[1,0,0], [0,1,0]])
         # Update self.weights with result from back_propagation
