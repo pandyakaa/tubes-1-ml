@@ -46,7 +46,13 @@ class MyMlp(object):
         pass
 
     def initialize_biases(self):
-        pass
+        # Count number of passes to make
+        n_passes = len(self.weights)
+        
+        #initialize bias with 0.01
+        for i in range(0,n_passes):
+            self.bias = self.bias.append(0.01)
+        
     
     def feed_forward(self, input_values: np.array) :
         # Output : list of np.array of np.array 
@@ -54,11 +60,13 @@ class MyMlp(object):
         # Count number of passes to make
         n_passes = len(self.weights)
         # Append result_list
-        result_list.append(input_layer)
+        result_list.append(input_values)
 
         for i in range(0,n_passes) :
             input_values = np.dot(input_values,self.weights[i])
-            result_list = result_list.append()
+            # factor in biases
+            input_values = input_values + self.bias[i]
+            result_list = result_list.append(input_values)
         return result_list
 
     def back_propagation(self, output: list, target: np.array) -> list:
