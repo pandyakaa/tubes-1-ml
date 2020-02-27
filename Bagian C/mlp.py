@@ -117,7 +117,6 @@ class MyMlp(object):
                     x_mini_batches[i], y_mini_batches[i], learning_rate)
 
     def update_batch(self, mini_batch_data, mini_batch_target, learning_rate):
-
         feed_forward_result = self.feed_forward(mini_batch_data.T)
         target_matrix = mini_batch_target.T
 
@@ -126,6 +125,8 @@ class MyMlp(object):
 
         for i in range(len(self.weights)):
             self.weights[i] += (learning_rate * back_prop_result[i])
+
+        print(self.weights)
 
     def predict(self, x_test: np.array) -> np.array:
         result = self.feed_forward(x_test.T)

@@ -4,7 +4,7 @@ from sklearn.utils import shuffle
 
 if __name__ == "__main__":
     X, y = load_iris(return_X_y=True)
-    X, y = shuffle(X, y)
+    X, y = shuffle(X, y, random_state=0)
 
     clf = MLPClassifier(solver='sgd', activation='logistic',
                         hidden_layer_sizes=(4, 3), batch_size=10,
