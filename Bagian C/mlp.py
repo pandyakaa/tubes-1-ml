@@ -29,14 +29,10 @@ class MyMlp(object):
             mini_batches = [x_train[i:i+mini_batch_size]
                             for i in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
-                delta_w = self.update_batch(mini_batch)
+                self.update_batch(mini_batch)
 
-            self.update_weight(delta_w)
-
-    def update_batch(self, mini_batch) -> np.array:
-        pass
-
-    def update_weight(self, delta_w):
+    def update_batch(self, mini_batch):
+        # Update weight per batch
         pass
 
     def predict(self, x_test: np.array) -> np.array:
