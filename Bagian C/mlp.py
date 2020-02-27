@@ -160,14 +160,17 @@ class MyMlp(object):
     def fit(self, x_train: np.array, y_train: np.array, treshold: float, mini_batch_size=10, epochs=1000, learning_rate=0.01):
         n = len(x_train)
         for epoch in range(epochs):
+            print(f"Epoch {epoch}... ", end="", flush=True)
             x_mini_batches = [x_train[i:i+mini_batch_size]
                               for i in range(0, n, mini_batch_size)]
             y_mini_batches = [y_train[i:i+mini_batch_size]
                               for i in range(0, n, mini_batch_size)]
+
             for i in range(len(x_mini_batches)):
                 self.update_batch(
                     x_mini_batches[i], y_mini_batches[i], learning_rate)
-                print(f"Epoch {epoch} batch {i} finished!")
+
+            print("finished!", end="\r", flush=True)
 
     def update_batch(self, mini_batch_data, mini_batch_target, learning_rate):
         feed_forward_result = self.feed_forward(mini_batch_data.T)
