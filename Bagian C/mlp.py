@@ -14,6 +14,10 @@ class MyMlp(object):
         self.n_layer = 2 + len(hidden_layer)
         self.bias = []
 
+        self.initialize_weights()
+        self.initialize_biases()
+
+
     def initialize_weights(self):
         # Uses Xavier Initialization technique to initialize random weights
         # Initialize first set of weights input - hidden 1
@@ -36,10 +40,10 @@ class MyMlp(object):
         layer_2 = self.output_layer 
         weight_matrix = np.random.randn(layer_2,layer_1)*np.sqrt(2/layer_1 + layer_2)
         self.weights = self.weights.append(weight_matrix)
-        
+
         pass
 
-    def initialize_bias(self):
+    def initialize_biases(self):
         pass
     
     def feed_forward(self, input_values: np.array) :
