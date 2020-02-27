@@ -1,5 +1,6 @@
 from utils import d_node, d_sigmoid
 from functools import reduce
+
 import numpy as np
 import random
 import math
@@ -48,15 +49,14 @@ class MyMlp(object):
     def initialize_biases(self):
         # Count number of passes to make
         n_passes = len(self.weights)
-        
-        #initialize bias with 0.01
-        for i in range(0,n_passes):
+
+        # initialize bias with 0.01
+        for i in range(0, n_passes):
             self.bias.append(0.01)
-        
-    
-    def feed_forward(self, input_values: np.array) :
-        # Output : list of np.array of np.array 
-        result_list = [] 
+
+    def feed_forward(self, input_values: np.array):
+        # Output : list of np.array of np.array
+        result_list = []
         # Count number of passes to make
         n_passes = len(self.weights)
         # Append result_list
@@ -64,7 +64,7 @@ class MyMlp(object):
         # print(input_values)
         # print(self.weights)
 
-        for i in range(0,n_passes) :
+        for i in range(0, n_passes):
             input_values = np.dot(self.weights[i], input_values)
             # factor in biases
             input_values = input_values + self.bias[i]
@@ -72,22 +72,29 @@ class MyMlp(object):
 
         return result_list
 
-    def back_propagation(self, output: list, target: np.array) -> list:
+    def back_propagation(self, output: list, target: np.array, current_weight: list) -> list:
         # Output : array of np.array 2 dimensi sebagai representasi delta W
         all_avg_dw = list()
+        d_node_layer_temp = np.array([])
 
         for i in range(len(output) - 1, 0, -1):
             # print(i)
             # print(target)
-            # print(output[i])
-            d_node_layer = np.vectorize(d_node)(target, output[i])
+            if (i == len(output) - 1):
+                d_node_layer = np.vectorize(d_node)(target, output[i])
+            else:
+                d_node_layer = d_node_layer_temp
+
+            d_node_layer_temp = np.matmul(
+                d_node_layer.T, current_weight[i - 1]).T
+
             h = output[i - 1]
             data_count_per_batch = d_node_layer.shape[1]
 
             all_dw_layer = list()
 
             for j in range(data_count_per_batch):
-                dw = np.matmul(h[:, j:j+1], d_node_layer[:, j:j+1].T)
+                dw = np.matmul(d_node_layer[:, j:j+1], h[:, j:j+1].T)
                 all_dw_layer.append(dw)
 
             avg_dw_layer = reduce(lambda x, y: x + y, all_dw_layer)
@@ -106,7 +113,8 @@ class MyMlp(object):
             y_mini_batches = [y_train[i:i+mini_batch_size]
                               for i in range(0, n, mini_batch_size)]
             for i in range(len(x_mini_batches)):
-                self.update_batch(x_mini_batches[i], y_mini_batches[i], learning_rate)
+                self.update_batch(
+                    x_mini_batches[i], y_mini_batches[i], learning_rate)
 
     def update_batch(self, mini_batch_data, mini_batch_target, learning_rate):
 
@@ -114,7 +122,7 @@ class MyMlp(object):
         target_matrix = mini_batch_target.T
 
         back_prop_result = self.back_propagation(
-            feed_forward_result, target_matrix)
+            feed_forward_result, target_matrix, self.weights)
 
         for i in range(len(self.weights)):
             self.weights[i] += (learning_rate * back_prop_result[i])
