@@ -31,6 +31,11 @@ class MyMlp(object):
 
     def score(self, x_test: np.array, y_test: np.array) -> float:
         # Output : akurasi dari model
-        pass
+        correct = 0
+        y_predict = self.predict(x_test)
+        for out, target in zip(y_predict, y_test):
+            if(np.array_equal(out,target)):
+                correct+=1
+        return correct/x_test.shape[0]
 
     pass
