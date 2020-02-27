@@ -4,6 +4,8 @@ import csv
 import numpy as np
 
 # CSV reader function
+
+
 def read_csv(filename):
     with open(filename) as f:
         temp_mat = []
@@ -36,5 +38,9 @@ def oneHotEncoder(target):
     encoded = np.array(encoded)
     return encoded
 
-def multiply_matrix_to_column_vector(mat, vec) -> np.array:
-    pass
+def half_squared_err(delta):
+    return 0.5*(delta**2)
+
+
+def d_node(target, out):
+    return -1*(target - out) * out * (1 - out)
