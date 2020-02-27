@@ -16,9 +16,16 @@ class MyMlp(object):
     def initialize_weights(self):
         pass
 
-    def feed_forward(self, input_values: np.array) -> np.array:
-        # Output : np.array
-        pass
+    def feed_forward(self, input_values: np.array) :
+        # Output : list of np.array of np.array 
+        result_list = [] 
+        #Count number of passes to make
+        n_passes = len(self.weights)
+
+        for i in range(0,n_passes) :
+            input_values = np.dot(input_values,self.weights[i])
+            result_list = result_list.append()
+        return result_list
 
     def back_propagation(self, output: np.array, target: np.array) -> np.array:
         # Output : array of np.array 2 dimensi sebagai representasi delta W
