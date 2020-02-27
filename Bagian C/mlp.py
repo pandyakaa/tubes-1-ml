@@ -4,8 +4,6 @@ import random
 
 class MyMlp(object):
 
-    [np.array([[1, 2], [3, 4]])]
-
     def __init__(self, input_layer, hidden_layer, output_layer):
         self.input_layer = input_layer
         self.hidden_layer = hidden_layer
@@ -39,7 +37,7 @@ class MyMlp(object):
         # Return from feed forward passed to back_propagation
         # Target diubah dari satu kolom, jadi n kolom dengan nilai masing-masing (contoh : [[1,0,0], [0,1,0]])
         # Update self.weights with result from back_propagation
-        print(mini_batch)
+        print(type(mini_batch))
 
     def predict(self, x_test: np.array) -> np.array:
         pass
@@ -69,7 +67,7 @@ if __name__ == "__main__":
     input_layer = [0, 1]
     hidden_layer = [2]
     output_layer = [0, 1]
-    x_train = np.array([[1, 2], [3, 4]])
+    x_train = np.array([[1, 2, 3], [3, 4, 5]])
     y_train = np.array([[1], [2]])
     mlp = MyMlp(input_layer, hidden_layer, output_layer)
     mlp.fit(x_train, y_train, 0.2)
