@@ -8,11 +8,11 @@ if __name__ == "__main__":
     label = dataset[0]
     data = dataset[1:]
 
-    data = shuffle(data, random_state=0)
+    data = shuffle(data)
     target_values = data[0:100, -1:].flatten()
 
     data_feature = data[0:100, :-1].astype(float)
-    data_feature = scale_data(data_feature,0,1)
+    data_feature = scale_data(data_feature,-1,1)
     data_target = oneHotEncoder(target_values)
 
     input_layer = len(data_feature[0])
@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     mlp = MyMlp(input_layer, hidden_layer, output_layer)
     mlp.fit(data_feature, data_target, 0.1,
-            mini_batch_size=10, epochs=1000, learning_rate=0.01)
+            mini_batch_size=10, epochs=10000, learning_rate=0.01)
 
     mlp.print()
 
