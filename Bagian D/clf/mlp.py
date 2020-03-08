@@ -200,9 +200,6 @@ class MyMlp(object):
         result = self.feed_forward(x_test.T)[-1].T
         classes = []
 
-        for i in range(3):
-            print(result[i])
-
         for t in result:
             temp = np.array(np.zeros(t.shape[0], dtype=int))
             temp[np.argmax(t)] = 1
