@@ -65,7 +65,7 @@ class C45(ID3):
         return infosplit
 
     def fit(self, x, y, prune=False):
-        self.tree = C45._fit(x, self.label, y, prune=prune)
+        self.tree = C45._fit(x, self.label, y)
         
     @staticmethod
     def _fit(x, labels, y, default_val=False, prune=False):

@@ -22,8 +22,9 @@ def is_continuous(x) :
         return False
 
 def process_numeric(M, target) :
-# Input : 2D numpy matrix containing attribute values 
+    # Input : 2D numpy matrix containing attribute values
     n_attribute = M.shape[1] # Get number of columns/attributes
+    M = M.astype('<U6')
     discretize_vect = np.vectorize(discretize)
     for column_index in range (0,n_attribute) :
         current_column = M[:,column_index] #Get current attribute
@@ -33,7 +34,7 @@ def process_numeric(M, target) :
             discrete_column = discretize_vect(M[:,column_index],threshold)
             M[:,column_index] = discrete_column
 
-    # return discrete_cols
+    return M
 #[1,2,1,2,2] [0,0,0,1,1]
 def find_threshold(array, target) :
     index = 0
@@ -59,7 +60,7 @@ def find_threshold(array, target) :
     threshold_index = list_of_entropy.index(min(list_of_entropy))
     return list_of_tuple[threshold_index][0]
 
-def discretize(item, threshold) : 
+def discretize(item, threshold) :
     if float(item) <= threshold :
         return "<= %s" % (threshold)
     else :

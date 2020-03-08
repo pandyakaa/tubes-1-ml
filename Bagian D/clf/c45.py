@@ -1,10 +1,10 @@
-from id3 import ID3, mode
+from .id3 import ID3, mode
 import numpy as np
-from reader import read_csv
-from Node import Node
+from .reader import read_csv
+from .Node import Node
 from math import ceil, log2
-from c45_numeric_handler import process_numeric
-from Rule import Rule
+from .c45_numeric_handler import process_numeric
+from .Rule import Rule
 
 
 def powerset(s):
@@ -64,10 +64,12 @@ class C45(ID3):
 
         return infosplit
 
+    def fit(self, x, y, prune=False):
+        self.tree = C45._fit(x, self.label, y)
+        
     @staticmethod
-    def fit(x, labels, y, default_val=False, prune=False):
-        x = C45.normalize_missing_attribute(x, y)
-        process_numeric(x, y)
+    def _fit(x, labels, y, default_val=False, prune=False):
+        # x = C45.normalize_missing_attribute(x, y)
 
         gain = list()
 
@@ -116,7 +118,7 @@ class C45(ID3):
 
         # Recursively set child for each attribute
         for value, data in data_per_values.items():
-            node.set_child(value, ID3.fit(data[0], next_labels, data[1]))
+            node.set_child(value, ID3._fit(data[0], next_labels, data[1]))
 
         if prune :
             x_test, y_test, x_train, y_train = C45.train_test_split(x, y)

@@ -33,6 +33,9 @@ class Node(object):
             raise KeyError()
 
     def get_child(self, value: str):
+        print(value)
+        for k in self.children:
+            print(self.children)
         if value in self.children:
             return self.children[value]
         else:

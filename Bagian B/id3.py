@@ -19,10 +19,11 @@ class ID3(object):
         self.tree: Node = None
         self.label = None
 
-    def predict(self, x, labels):
+    def predict(self, x):
         predict_result = np.array([])
         root_label = self.tree.attr_name
         root_is_leaf = self.tree.is_leaf
+        labels = self.label
 
         if root_is_leaf:
             return np.array([root_label])
