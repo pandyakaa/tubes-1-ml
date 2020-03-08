@@ -17,6 +17,7 @@ def mode(data):
 class ID3(object):
     def __init__(self):
         self.tree: Node = None
+        self.label = None
 
     def predict(self, x, labels):
         predict_result = np.array([])
@@ -87,8 +88,11 @@ class ID3(object):
 
         return entropy
 
+    def fit(self, x, y):
+        self.tree = ID3._fit(x, self.label, y)
+    
     @staticmethod
-    def fit(x, labels, y, default_val=False):
+    def _fit(x, labels, y, default_val=False):
         gain = list()
 
         if default_val == False:
@@ -136,7 +140,7 @@ class ID3(object):
 
         # Recursively set child for each attribute
         for value, data in data_per_values.items():
-            node.set_child(value, ID3.fit(data[0], next_labels, data[1]))
+            node.set_child(value, ID3._fit(data[0], next_labels, data[1]))
 
         return node
 
