@@ -1,4 +1,4 @@
-from utils import d_node, d_sigmoid, sigmoid
+from .utils import d_node, d_sigmoid, sigmoid
 from functools import reduce
 
 import numpy as np
@@ -158,10 +158,11 @@ class MyMlp(object):
         return all_avg_dw
 
     def fit(self, x_train: np.array, y_train: np.array):
-        treshold: float 
+        treshold: 0.01       
         mini_batch_size=10 
-        epochs=1000 
+        epochs=100 
         learning_rate=0.01
+
         
         n = len(x_train)
         for epoch in range(epochs):
@@ -174,8 +175,6 @@ class MyMlp(object):
             for i in range(len(x_mini_batches)):
                 self.update_batch(
                     x_mini_batches[i], y_mini_batches[i], learning_rate)
-
-            print("finished!", end="\r", flush=True)
 
     def update_batch(self, mini_batch_data, mini_batch_target, learning_rate):
         feed_forward_result = self.feed_forward(mini_batch_data.T)
