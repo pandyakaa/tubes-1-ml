@@ -1,4 +1,4 @@
-from .utils import d_node, d_sigmoid, sigmoid
+from .utils import d_node, d_sigmoid, sigmoid, one_hot_encoder
 from functools import reduce
 
 import numpy as np
@@ -7,8 +7,7 @@ import math
 
 
 class MyMlp(object):
-
-    def __init__(self, input_layer, hidden_layer, output_layer):
+    def __init__(self, input_layer, hidden_layer, output_layer, treshold=0.01, mini_batch_size=10, epochs=500, learning_rate=0.01):
         self.input_layer = input_layer
         self.hidden_layer = hidden_layer
         self.output_layer = output_layer
@@ -17,6 +16,10 @@ class MyMlp(object):
         self.weights = []
         self.n_layer = 2 + len(hidden_layer)
         self.bias = []
+        self.treshold = treshold
+        self.mini_batch_size = mini_batch_size
+        self.epochs = epochs
+        self.learning_rate = learning_rate
 
         self.initialize_weights()
         self.initialize_biases()
@@ -158,15 +161,17 @@ class MyMlp(object):
         return all_avg_dw
 
     def fit(self, x_train: np.array, y_train: np.array):
-        treshold: 0.01       
-        mini_batch_size=10 
-        epochs=100 
-        learning_rate=0.01
+        treshold = self.treshold
+        mini_batch_size = self.mini_batch_size
+        epochs = self.epochs
+        learning_rate = self.learning_rate
 
-        
         n = len(x_train)
+        y_encoded = one_hot_encoder(y_train)
+        y_train = y_encoded['encoded']
+        self.y_dict = y_encoded['dict']
+
         for epoch in range(epochs):
-            print(f"Epoch {epoch}... ", end="", flush=True)
             x_mini_batches = [x_train[i:i+mini_batch_size]
                               for i in range(0, n, mini_batch_size)]
             y_mini_batches = [y_train[i:i+mini_batch_size]
@@ -195,10 +200,14 @@ class MyMlp(object):
         result = self.feed_forward(x_test.T)[-1].T
         classes = []
 
+        for i in range(3):
+            print(result[i])
+
         for t in result:
             temp = np.array(np.zeros(t.shape[0], dtype=int))
             temp[np.argmax(t)] = 1
-            classes.append(temp)
+            class_prediction = self.get_class_from_array(temp)
+            classes.append(class_prediction)
 
         classes = np.array(classes)
         return classes
@@ -222,3 +231,8 @@ class MyMlp(object):
                     w = layer+str(j)+'-'+str(i)+') : '+str(weightRow[j])
                     print(w, end='  ')
             print('\n')
+
+    def get_class_from_array(self, array: np.array):
+        for cls_name, cls_value in self.y_dict.items():
+            if all(cls_value == array):
+                return cls_name
