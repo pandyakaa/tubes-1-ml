@@ -1,4 +1,4 @@
-from Rule import Rule
+from .Rule import Rule
 
 
 class Node(object):

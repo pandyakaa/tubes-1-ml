@@ -1,7 +1,8 @@
 import numpy as np
 import math
 from statistics import mode
-from Node import Node
+from .Node import Node
+from .c45_numeric_handler import process_numeric
 
 def mode(data):
     flat = data.flatten()
@@ -17,11 +18,13 @@ def mode(data):
 class ID3(object):
     def __init__(self):
         self.tree: Node = None
+        self.label = None
 
-    def predict(self, x, labels):
+    def predict(self, x):
         predict_result = np.array([])
         root_label = self.tree.attr_name
         root_is_leaf = self.tree.is_leaf
+        labels = self.label
 
         if root_is_leaf:
             return np.array([root_label])
@@ -87,8 +90,11 @@ class ID3(object):
 
         return entropy
 
+    def fit(self, x, y):
+        self.tree = ID3._fit(x, self.label, y)
+    
     @staticmethod
-    def fit(x, labels, y, default_val=False):
+    def _fit(x, labels, y, default_val=False):
         gain = list()
 
         if default_val == False:
@@ -136,7 +142,7 @@ class ID3(object):
 
         # Recursively set child for each attribute
         for value, data in data_per_values.items():
-            node.set_child(value, ID3.fit(data[0], next_labels, data[1]))
+            node.set_child(value, ID3._fit(data[0], next_labels, data[1]))
 
         return node
 
